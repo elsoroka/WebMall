@@ -4250,14 +4250,14 @@ the comparison of agents using exactly the same experimental setup.
                                 position: "bottom",
                                 title: {
                                     display: true,
-                                    text: "Cost per Task (USD, log scale)",
+                                    text: "Average Cost per Task ($) - Log scale)",
                                     font: {
                                         size: 20,
                                     },
                                 },
                                 ticks: {
                                     callback: function (value, index, values) {
-                                        return "$" + value.toFixed(2);
+                                        return value.toFixed(2);
                                     },
                                     font: {
                                         size: 16,
@@ -4277,7 +4277,7 @@ the comparison of agents using exactly the same experimental setup.
                                 },
                                 ticks: {
                                     callback: function (value, index, values) {
-                                        return value.toFixed(0) + "%";
+                                        return value.toFixed(0);
                                     },
                                     font: {
                                         size: 16,
