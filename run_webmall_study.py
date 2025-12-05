@@ -149,12 +149,15 @@ load_dotenv(PATH_TO_DOT_ENV_FILE)
 
 
 # choose your agent or provide a new agent
-agent_args = [AGENT_5mini_AX_M]
+agent_args = [AGENT_41_AX_M]
 
 # ## select the benchmark to run on
 
-benchmark = "webmall_basic_v1.0"
-# benchmark = "webmall_advanced_v1.0"
+benchmark = "webmall_specific_product_search_v1.0"
+# benchmark = "webmall_vague_product_search_v1.0"
+# benchmark = "webmall_cheapest_product_search_v1.0"
+# benchmark = "webmall_action_and_transaction_v1.0"
+# benchmark = "webmall_end_to_end_v1.0"
 
 # Set reproducibility_mode = True for reproducibility
 # this will "ask" agents to be deterministic. Also, it will prevent you from launching if you have
