@@ -72,6 +72,20 @@ run_webmall_study.py
 - 4 WordPress/WooCommerce shops (ports 8081–8084), 4 MariaDB instances, Elasticsearch, Nginx frontend (8085)
 - Bitnami images with persistent named volumes
 
+**`AgentLab/src/agentlab/agents/webmall_generic_agent/`** — Custom agent implementations (key fork additions):
+- `generic_agent.py` + `generic_agent_prompt.py`: Single-stage agent that builds a prompt from the current observation and calls one LLM to predict the next action.
+- `planning_agent.py` + `planner_agent_prompt.py`: Two-stage hierarchical agent. A **planner LLM** generates a Python code plan (validated via `compile()`); an **executor LLM** runs that plan inside a background thread using a `ThreadPoolExecutor`, communicating with the main thread via action/observation queues. Action functions available to the plan: `search_for_page`, `fill_text_field`, `press_button`, `select_option`, `add_to_cart`, `checkout`, `generic_action`, etc.
+- `agent_configs.py`: Pre-built `AgentArgs` instances for all supported models (`AGENT_4o`, `AGENT_CLAUDE_SONNET_35`, `AGENT_37_SONNET`, `AGENT_o3_MINI`, `AGENT_5_PLANNER`, etc.). `AGENT_5_PLANNER` pairs a GPT-5 planner with a GPT-4o executor.
+- `reproducibility_agent.py`: `ReproAgent` replays prior run traces using a mock LLM (`ReproChatModel`), useful for deterministic re-execution.
+
+**Prompt flags** (`GenericPromptFlags` / `PlannerPromptFlags`) controlling agent behavior:
+- `obs.use_ax_tree`, `obs.use_screenshot`, `obs.use_som` — observation modalities
+- `use_thinking`, `use_plan`, `use_memory`, `use_hints` — reasoning modules
+- `max_prompt_tokens` — token budget for prompt truncation
+
+**Fork-specific additions to upstream AgentLab** (see `dynamic_prompting.py`):
+- `PlannerGoalInstructions`, `PlannerSystemPromptElement`, `PlannerActionPromptElement` classes added for the two-stage planning pipeline
+
 **`analyze_agentlab_results/`** — Post-run analysis scripts:
 - `aggregate_log_statistics.py`, `summarize_study.py`, `task_logs_extractor.py`
 
@@ -84,11 +98,11 @@ Defined in `webmall_overrides/configs.py`:
 - `webmall_end_to_end_v1.0` — Full end-to-end tasks
 
 ### Agent Configuration (in run scripts)
-Agents are configured via AgentLab's `GenericAgent` with flags:
-- `use_ax` — accessibility tree observation
-- `use_screenshot` / `use_som` — vision capabilities
-- `use_memory` — memory module
-- LLM model (GPT-4o, Claude Sonnet, etc.)
+Import pre-built configs from `AgentLab/src/agentlab/agents/webmall_generic_agent/agent_configs.py`:
+```python
+from agentlab.agents.webmall_generic_agent.agent_configs import AGENT_4o, AGENT_5_PLANNER
+```
+Use `GenericAgent` for single-stage or `PlanningAgent` for two-stage (planner + executor). Pass `AgentArgs` to `WebMallStudy` alongside the benchmark config.
 
 ## Environment Variables
 
