@@ -74,7 +74,7 @@ run_webmall_study.py
 
 **`AgentLab/src/agentlab/agents/webmall_generic_agent/`** — Custom agent implementations (key fork additions):
 - `generic_agent.py` + `generic_agent_prompt.py`: Single-stage agent that builds a prompt from the current observation and calls one LLM to predict the next action.
-- `planning_agent.py` + `planner_agent_prompt.py`: Two-stage hierarchical agent. A **planner LLM** generates a Python code plan (validated via `compile()`); an **executor LLM** runs that plan inside a background thread using a `ThreadPoolExecutor`, communicating with the main thread via action/observation queues. Action functions available to the plan: `search_for_page`, `fill_text_field`, `press_button`, `select_option`, `add_to_cart`, `checkout`, `generic_action`, etc.
+- `planning_agent.py` + `planner_agent_prompt.py`: **Work in progress.** Two-stage hierarchical agent. A **planner LLM** generates a Python code plan (validated via `compile()`); an **executor LLM** runs that plan inside a background thread using a `ThreadPoolExecutor`, communicating with the main thread via action/observation queues. Action functions available to the plan: `search_for_page`, `fill_text_field`, `press_button`, `select_option`, `add_to_cart`, `checkout`, `generic_action`, etc.
 - `agent_configs.py`: Pre-built `AgentArgs` instances for all supported models (`AGENT_4o`, `AGENT_CLAUDE_SONNET_35`, `AGENT_37_SONNET`, `AGENT_o3_MINI`, `AGENT_5_PLANNER`, etc.). `AGENT_5_PLANNER` pairs a GPT-5 planner with a GPT-4o executor.
 - `reproducibility_agent.py`: `ReproAgent` replays prior run traces using a mock LLM (`ReproChatModel`), useful for deterministic re-execution.
 
