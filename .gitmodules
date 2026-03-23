@@ -4,5 +4,5 @@
 	branch = main
 [submodule "AgentLab"]
 	path = AgentLab
-	url = https://github.com/YOUR_USERNAME/AgentLab.git
-	branch = main
+	url = https://github.com/elsoroka/AgentLab.git
+	branch = verified_trajectories
