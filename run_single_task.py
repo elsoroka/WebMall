@@ -46,7 +46,7 @@ FLAGS_default = GenericPromptFlags(
     action=dp.ActionFlags(
         action_set=bgym.HighLevelActionSetArgs(
             subsets=["bid"],
-            multiaction=False,
+            multiaction=True,
         ),
         long_description=False,
         individual_examples=False,
@@ -126,7 +126,7 @@ AGENT_5_PLANNER = PlanningAgentArgs(
 
 # example for a single task
 env_args = EnvArgsWebMall(
-    task_name="webmall.Webmall_Find_Specific_Product_Task4",
+    task_name="webmall.Webmall_Find_Specific_Product_Task3",
     task_seed=0,
     max_steps=30,
     headless=True,
