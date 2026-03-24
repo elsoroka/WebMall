@@ -128,7 +128,7 @@ AGENT_5_PLANNER = PlanningAgentArgs(
 env_args = EnvArgsWebMall(
     task_name="webmall.Webmall_Find_Specific_Product_Task4",
     task_seed=0,
-    max_steps=30,
+    max_steps=50,
     headless=True,
     record_video=False
 )
