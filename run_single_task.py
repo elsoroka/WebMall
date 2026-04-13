@@ -118,15 +118,30 @@ AGENT_CLAUDE_AX_M = GenericAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["anthropic/claude-sonnet-4-20250514"],
     flags=FLAGS_AX_M,
 )
+
 AGENT_5_PLANNER = PlanningAgentArgs(
     planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
+    flags=FLAGS_AX,
+    max_steps=50,
+)
+
+AGENT_4_1_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
+    flags=FLAGS_AX,
+    max_steps=50,
+)
+AGENT_4o_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
     executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
     flags=FLAGS_AX,
+    max_steps=50,
 )
 
 # example for a single task
 env_args = EnvArgsWebMall(
-    task_name="webmall.Webmall_Find_Specific_Product_Task4",
+    task_name="webmall.Webmall_Find_Specific_Product_Task1",
     task_seed=0,
     max_steps=50,
     headless=True,
