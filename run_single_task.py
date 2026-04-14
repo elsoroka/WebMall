@@ -123,19 +123,31 @@ AGENT_5_PLANNER = PlanningAgentArgs(
     executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
     flags=FLAGS_AX,
 )
+AGENT_41_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
+    flags=FLAGS_AX,
+)
+
+AGENT_4o_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
+    flags=FLAGS_AX,
+)
+
 
 # example for a single task
 env_args = EnvArgsWebMall(
-    task_name="webmall.Webmall_Find_Specific_Product_Task3",
+    task_name="webmall.Webmall_Find_Specific_Product_Task4",
     task_seed=0,
-    max_steps=30,
+    max_steps=60,
     headless=True,
     record_video=False
 )
 
 
 
-agent = AGENT_5_PLANNER
+agent = AGENT_41_PLANNER
 agent.set_benchmark(bgym.DEFAULT_BENCHMARKS["webarena"](), demo_mode="off")
 
 #chat_model_args = CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"]

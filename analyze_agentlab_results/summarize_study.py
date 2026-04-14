@@ -1,11 +1,14 @@
-from .task_logs_extractor import summarize_single_task
+try:
+    from task_logs_extractor import summarize_single_task
+except ImportError:
+    from .task_logs_extractor import summarize_single_task
 import os
 import json
 import re
 import csv
 from collections import defaultdict
 
-STUDY_RESULTS_DIR = "../AgentLab/study_results"
+STUDY_RESULTS_DIR = "../AgentLab/study_results/final"
 
 
 def calculation_results(benchmark_solutions, model_solution):
