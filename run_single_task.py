@@ -141,7 +141,7 @@ AGENT_4o_PLANNER = PlanningAgentArgs(
 
 # example for a single task
 env_args = EnvArgsWebMall(
-    task_name="webmall.Webmall_Find_Specific_Product_Task1",
+    task_name="webmall.Webmall_Add_To_Cart_Task5",
     task_seed=0,
     max_steps=50,
     headless=True,
@@ -150,7 +150,7 @@ env_args = EnvArgsWebMall(
 
 
 
-agent = AGENT_5_PLANNER
+agent = AGENT_4o_PLANNER
 agent.set_benchmark(bgym.DEFAULT_BENCHMARKS["webarena"](), demo_mode="off")
 
 #chat_model_args = CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"]

@@ -34,7 +34,6 @@ def get_first_valid(response:str)->str:
         s[i] = s[i][6:].strip() # clip this off
       try:
         byte_code = compile(s[i], "<user_code>", "exec")
-        print(s[i])
         return s[i]
       except Exception as e:
         print(e)

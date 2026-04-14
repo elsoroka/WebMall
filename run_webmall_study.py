@@ -9,6 +9,7 @@ repository.
 import os
 import logging
 from dotenv import load_dotenv
+from AgentLab.src.agentlab.agents.webmall_generic_agent.planning_agent import PlanningAgentArgs
 import bgym
 
 from agentlab.agents.visualwebmall_agent.agent import WA_AGENT_4O
@@ -143,21 +144,39 @@ AGENT_CLAUDE_AX_M = GenericAgentArgs(
     flags=FLAGS_AX_M,
 )
 
+AGENT_5_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
+    flags=FLAGS_AX,
+)
+
+AGENT_4_1_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
+    flags=FLAGS_AX,
+)
+AGENT_4o_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
+    flags=FLAGS_AX,
+)
+
 current_file = Path(__file__).resolve()
 PATH_TO_DOT_ENV_FILE = current_file.parent / ".env"
 load_dotenv(PATH_TO_DOT_ENV_FILE)
 
 
 # choose your agent or provide a new agent
-agent_args = [AGENT_41_AX_M]
+agent_args = [AGENT_4_1_PLANNER]
 
 # ## select the benchmark to run on
 
-benchmark = "webmall_specific_product_search_v1.0"
+#benchmark = "webmall_specific_product_search_v1.0"
 # benchmark = "webmall_vague_product_search_v1.0"
 # benchmark = "webmall_cheapest_product_search_v1.0"
-# benchmark = "webmall_action_and_transaction_v1.0"
+benchmark = "webmall_action_and_transaction_v1.0"
 # benchmark = "webmall_end_to_end_v1.0"
+#benchmark = "webmall_basic_v1.0"
 
 # Set reproducibility_mode = True for reproducibility
 # this will "ask" agents to be deterministic. Also, it will prevent you from launching if you have
@@ -201,7 +220,7 @@ if __name__ == "__main__":  # necessary for dask backend
     parallel_backends = ["sequential", "ray"]
     study.run(
         n_jobs=n_jobs,
-        parallel_backend=parallel_backends[1],
+        parallel_backend=parallel_backends[0],
         strict_reproducibility=reproducibility_mode,
         n_relaunch=1,
     )
