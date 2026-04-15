@@ -3,6 +3,7 @@ Script to run a single or set of specific tasks
 """
 
 import logging
+from AgentLab.src.agentlab.agents.webmall_generic_agent.nl_planning_agent import NlPlanningAgentArgs
 import bgym
 from dotenv import load_dotenv
 from pathlib import Path
@@ -118,6 +119,23 @@ AGENT_CLAUDE_AX_M = GenericAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["anthropic/claude-sonnet-4-20250514"],
     flags=FLAGS_AX_M,
 )
+
+
+FLAGS_AX_NL = FLAGS_AX.copy()
+FLAGS_AX_NL.use_plan = True
+
+AGENT_5_NL_PLANNER = NlPlanningAgentArgs(
+    chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
+    flags=FLAGS_AX_NL
+,
+)
+AGENT_41_NL_PLANNER = NlPlanningAgentArgs(
+    chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
+    flags=FLAGS_AX_NL
+,
+)
+
+
 AGENT_5_PLANNER = PlanningAgentArgs(
     planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
     executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
@@ -146,8 +164,7 @@ env_args = EnvArgsWebMall(
 )
 
 
-
-agent = AGENT_41_PLANNER
+agent = AGENT_41_NL_PLANNER
 agent.set_benchmark(bgym.DEFAULT_BENCHMARKS["webarena"](), demo_mode="off")
 
 #chat_model_args = CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"]
