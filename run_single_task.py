@@ -86,7 +86,7 @@ AGENT_41_AX = GenericAgentArgs(
 )
 
 AGENT_CLAUDE_AX = GenericAgentArgs(
-    chat_model_args=CHAT_MODEL_ARGS_DICT["anthropic/claude-sonnet-4-20250514"],
+    chat_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
     flags=FLAGS_AX,
 )
 
