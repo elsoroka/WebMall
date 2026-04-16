@@ -120,18 +120,14 @@ AGENT_CLAUDE_AX_M = GenericAgentArgs(
     flags=FLAGS_AX_M,
 )
 
-
-FLAGS_AX_NL = FLAGS_AX.copy()
-FLAGS_AX_NL.use_plan = True
-
 AGENT_5_NL_PLANNER = NlPlanningAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
-    flags=FLAGS_AX_NL
+    flags=FLAGS_AX
 ,
 )
 AGENT_41_NL_PLANNER = NlPlanningAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
-    flags=FLAGS_AX_NL
+    flags=FLAGS_AX
 ,
 )
 
@@ -156,7 +152,7 @@ AGENT_4o_PLANNER = PlanningAgentArgs(
 
 # example for a single task
 env_args = EnvArgsWebMall(
-    task_name="webmall.Webmall_Cheapest_Offer_Vague_Requirements_Task1",
+    task_name="webmall.Webmall_Find_Cheapest_Offer_Task1",
     task_seed=0,
     max_steps=60,
     headless=True,
