@@ -3,6 +3,7 @@ Script to run a single or set of specific tasks
 """
 
 import logging
+from AgentLab.src.agentlab.agents.agent_args import AgentArgs
 from AgentLab.src.agentlab.agents.webmall_generic_agent.nl_planning_agent import NlPlanningAgentArgs
 import bgym
 from dotenv import load_dotenv
@@ -130,7 +131,11 @@ AGENT_41_NL_PLANNER = NlPlanningAgentArgs(
     flags=FLAGS_AX
 ,
 )
-
+AGENT_CLAUDE_4_NL_PLANNER = NlPlanningAgentArgs(
+    chat_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
+    flags=FLAGS_AX
+,
+)
 
 AGENT_5_PLANNER = PlanningAgentArgs(
     planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
@@ -149,10 +154,16 @@ AGENT_4o_PLANNER = PlanningAgentArgs(
     flags=FLAGS_AX,
 )
 
+AGENT_CLAUDE_4_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
+    flags=FLAGS_AX
+,
+)
 
 # example for a single task
 env_args = EnvArgsWebMall(
-    task_name="webmall.Webmall_Find_Cheapest_Offer_Task1",
+    task_name="webmall.Webmall_Find_Cheapest_Offer_Task2",
     task_seed=0,
     max_steps=60,
     headless=True,
@@ -160,7 +171,7 @@ env_args = EnvArgsWebMall(
 )
 
 
-agent = AGENT_41_NL_PLANNER
+agent = AGENT_CLAUDE_4_PLANNER
 agent.set_benchmark(bgym.DEFAULT_BENCHMARKS["webarena"](), demo_mode="off")
 
 #chat_model_args = CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"]

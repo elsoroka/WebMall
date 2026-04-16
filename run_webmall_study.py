@@ -155,7 +155,11 @@ AGENT_41_NL_PLANNER = NlPlanningAgentArgs(
     flags=FLAGS_AX
 ,
 )
-
+AGENT_CLAUDE_4_NL_PLANNER = NlPlanningAgentArgs(
+    chat_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
+    flags=FLAGS_AX
+,
+)
 
 AGENT_5_PLANNER = PlanningAgentArgs(
     planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
@@ -174,13 +178,20 @@ AGENT_4o_PLANNER = PlanningAgentArgs(
     flags=FLAGS_AX,
 )
 
+AGENT_CLAUDE_4_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
+    flags=FLAGS_AX
+,
+)
+
 current_file = Path(__file__).resolve()
 PATH_TO_DOT_ENV_FILE = current_file.parent / ".env"
 load_dotenv(PATH_TO_DOT_ENV_FILE)
 
 
 # choose your agent or provide a new agent
-agent_args = [AGENT_41_PLANNER]
+agent_args = [AGENT_CLAUDE_4_PLANNER]
 
 # ## select the benchmark to run on
 
