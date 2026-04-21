@@ -141,7 +141,7 @@ AGENT_4o_PLANNER = PlanningAgentArgs(
 
 # example for a single task
 env_args = EnvArgsWebMall(
-    task_name="webmall.Webmall_Add_To_Cart_Task5",
+    task_name="webmall.Webmall_Cheapest_Offer_Specific_Requirements_Task1",
     task_seed=0,
     max_steps=50,
     headless=True,
