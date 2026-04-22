@@ -3,6 +3,8 @@ Script to run a single or set of specific tasks
 """
 
 import logging
+from AgentLab.src.agentlab.agents.agent_args import AgentArgs
+from AgentLab.src.agentlab.agents.webmall_generic_agent.nl_planning_agent import NlPlanningAgentArgs
 import bgym
 from dotenv import load_dotenv
 from pathlib import Path
@@ -46,7 +48,7 @@ FLAGS_default = GenericPromptFlags(
     action=dp.ActionFlags(
         action_set=bgym.HighLevelActionSetArgs(
             subsets=["bid"],
-            multiaction=False,
+            multiaction=True,
         ),
         long_description=False,
         individual_examples=False,
@@ -85,7 +87,7 @@ AGENT_41_AX = GenericAgentArgs(
 )
 
 AGENT_CLAUDE_AX = GenericAgentArgs(
-    chat_model_args=CHAT_MODEL_ARGS_DICT["anthropic/claude-sonnet-4-20250514"],
+    chat_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
     flags=FLAGS_AX,
 )
 
@@ -119,6 +121,25 @@ AGENT_CLAUDE_AX_M = GenericAgentArgs(
     flags=FLAGS_AX_M,
 )
 
+<<<<<<< HEAD
+=======
+AGENT_5_NL_PLANNER = NlPlanningAgentArgs(
+    chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
+    flags=FLAGS_AX
+,
+)
+AGENT_41_NL_PLANNER = NlPlanningAgentArgs(
+    chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
+    flags=FLAGS_AX
+,
+)
+AGENT_CLAUDE_4_NL_PLANNER = NlPlanningAgentArgs(
+    chat_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
+    flags=FLAGS_AX
+,
+)
+
+>>>>>>> f3ebf7fa14261a9d1a72f2c580ced3d8b5ef9c8f
 AGENT_5_PLANNER = PlanningAgentArgs(
     planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
     executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
@@ -138,6 +159,24 @@ AGENT_4o_PLANNER = PlanningAgentArgs(
     flags=FLAGS_AX,
     max_steps=50,
 )
+AGENT_41_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
+    flags=FLAGS_AX,
+)
+
+AGENT_4o_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
+    flags=FLAGS_AX,
+)
+
+AGENT_CLAUDE_4_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
+    flags=FLAGS_AX
+,
+)
 
 # example for a single task
 env_args = EnvArgsWebMall(
@@ -150,11 +189,9 @@ env_args = EnvArgsWebMall(
 
 
 
-agent = AGENT_4o_PLANNER
+agent = AGENT_CLAUDE_4_PLANNER
 agent.set_benchmark(bgym.DEFAULT_BENCHMARKS["webarena"](), demo_mode="off")
 
-#chat_model_args = CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"]
-#chat_model_args = CHAT_MODEL_ARGS_DICT["anthropic/claude-sonnet-4-20250514"]
 
 exp_args = [
     ExpArgsWebMall(
