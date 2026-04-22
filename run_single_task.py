@@ -121,6 +121,8 @@ AGENT_CLAUDE_AX_M = GenericAgentArgs(
     flags=FLAGS_AX_M,
 )
 
+<<<<<<< HEAD
+=======
 AGENT_5_NL_PLANNER = NlPlanningAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
     flags=FLAGS_AX
@@ -137,10 +139,25 @@ AGENT_CLAUDE_4_NL_PLANNER = NlPlanningAgentArgs(
 ,
 )
 
+>>>>>>> f3ebf7fa14261a9d1a72f2c580ced3d8b5ef9c8f
 AGENT_5_PLANNER = PlanningAgentArgs(
     planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
+    flags=FLAGS_AX,
+    max_steps=50,
+)
+
+AGENT_4_1_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
+    flags=FLAGS_AX,
+    max_steps=50,
+)
+AGENT_4o_PLANNER = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
     executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-2024-05-13"],
     flags=FLAGS_AX,
+    max_steps=50,
 )
 AGENT_41_PLANNER = PlanningAgentArgs(
     planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
@@ -163,19 +180,18 @@ AGENT_CLAUDE_4_PLANNER = PlanningAgentArgs(
 
 # example for a single task
 env_args = EnvArgsWebMall(
-    task_name="webmall.Webmall_Find_Cheapest_Offer_Task2",
+    task_name="webmall.Webmall_Cheapest_Offer_Specific_Requirements_Task1",
     task_seed=0,
-    max_steps=60,
+    max_steps=50,
     headless=True,
     record_video=False
 )
 
 
+
 agent = AGENT_CLAUDE_4_PLANNER
 agent.set_benchmark(bgym.DEFAULT_BENCHMARKS["webarena"](), demo_mode="off")
 
-#chat_model_args = CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"]
-#chat_model_args = CHAT_MODEL_ARGS_DICT["anthropic/claude-sonnet-4-20250514"]
 
 exp_args = [
     ExpArgsWebMall(
