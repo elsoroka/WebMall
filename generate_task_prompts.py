@@ -54,26 +54,20 @@ action_prompt = """
 # Functions::
 Your plan should make use of the following Python functions to interact with a web browser. Assume these functions handle all edge cases and error checking internally.
 
-14 different types of actions are available.
+12 different types of actions are available.
 
 noop(wait_ms: float = 1000)
-search_on_page(search_page_url: str, search_text: str) -> str
+search_on_page(search_page_url: str, search_text: str) -> Optional[str]
 open_page(url: str) -> bool
 close_page() -> bool
-go_back()
-go_forward()
 navigate_to_page(description: str) -> bool
-extract_information_from_page(description: str) -> str
+extract_information_from_page(description: str) -> Optional[Union[int, float, str]]
 fill_text_field(field_description: str, text: str) -> bool
 press_button(button_description: str) -> bool
-select_option(bid: str, options: str | list[str])
+select_option(bid: str, options: str | list[str]) -> bool
 generic_action(description: str) -> str
 add_to_cart(url: str, item_description: str) -> bool
 checkout(payment_and_shipping_information: str) -> bool
- Example:
-press_button(\'The submit button\')
-go_back()
-add_to_cart(\'product_url\')
 """
 
 with open("webmall_prompts.jsonl", "w") as outfile:
