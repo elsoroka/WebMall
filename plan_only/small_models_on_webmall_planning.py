@@ -11,20 +11,24 @@ import time
 import sys
 from vllm import LLM, SamplingParams
 import json
+from typing import Optional
 from tqdm import tqdm
 import argparse
 import os
+import torch
+import tiktoken
 
-os.environ['HF_HOME'] = "/scratch/m000186/esoroka/"
-os.environ['HF_DATASETS_CACHE'] = "/scratch/m000186/esoroka/"
-os.environ['VLLM_CACHE_ROOT'] = "/scratch/m000186/esoroka"
-os.environ['XDG_CACHE_HOME'] = "/scratch/m000186/esoroka"
+def setup_environment():
+  os.environ['HF_HOME'] = "/scratch/m000186/esoroka/"
+  os.environ['HF_DATASETS_CACHE'] = "/scratch/m000186/esoroka/"
+  os.environ['VLLM_CACHE_ROOT'] = "/scratch/m000186/esoroka"
+  os.environ['XDG_CACHE_HOME'] = "/scratch/m000186/esoroka"
+
 
 # count the number of tokens in this prompt
-import tiktoken
 enc = tiktoken.get_encoding("cl100k_base")
 
-def count_tokens(task:str)->int:
+def count_tokens(task:str, enc=enc)->int:
   num_tokens = len(enc.encode(task))
   return num_tokens
 
@@ -48,26 +52,7 @@ fill_text_field("Solution field", selected_url)
 press_button("Submit Final Result")
 ```"""
 
-
-if __name__ == "__main__":
-  parser = argparse.ArgumentParser()
-  parser.add_argument("--model", type=str, default="Qwen/Qwen3-Coder-30B-A3B-Instruct")
-  parser.add_argument("--temp", type=float, default=0.0)
-  parser.add_argument("--max_output_tokens", type=int, default=512)
-  parser.add_argument("--example", type=bool, default=True)
-  args = parser.parse_args()
-
-  os.environ['HF_HOME'] = "/scratch/m000186/esoroka/"
-  os.environ['HF_DATASETS_CACHE'] = "/scratch/m000186/esoroka/"
-  os.environ['VLLM_CACHE_ROOT'] = "/scratch/m000186/esoroka"
-  os.environ['XDG_CACHE_HOME'] = "/scratch/m000186/esoroka"
-
-  MODEL = args.model
-  TEMP = args.temp
-  EXAMPLE = args.example
-  MAX_OUTPUT_TOKENS = args.max_output_tokens
-  kwargs = {}
-
+def standardize_parameters(MODEL, TEMP, MAX_OUTPUT_TOKENS, kwargs)->SamplingParams:
   # use recommended parameters for Qwen3.5
   if MODEL == "Qwen/Qwen3.5-9B":
     #Thinking mode for precise coding tasks (e.g. WebDev):
@@ -86,35 +71,77 @@ if __name__ == "__main__":
               "repetition_penalty":1.05
     }
     MAX_OUTPUT_TOKENS = 65536
+  
+  return SamplingParams(temperature=TEMP, max_tokens=MAX_OUTPUT_TOKENS, **kwargs)
+
+def load_model(MODEL, params)->LLM:
+  return LLM(model=MODEL, dtype="bfloat16", tensor_parallel_size=4)
+
+class ChatModel:
+  def __init__(self, MODEL, params):
+    self.model = load_model(MODEL, params)
+    self.params = params
+
+  def chat(self, prompt:str)->str:
+    response = self.model.generate([prompt], self.params)
+    return response[0].outputs[0].text
 
 
-  def log(msg):
-    print(f"[{time.strftime('%H:%M:%S')}] {msg}", flush=True)
-    sys.stdout.flush()
+def log(msg:str):
+  print(f"[{time.strftime('%H:%M:%S')}] {msg}", flush=True)
+  sys.stdout.flush()
 
-  def log_gpu_memory(label=""):
-    if not torch.cuda.is_available():
-      log("CUDA not available")
-      return
-    for i in range(torch.cuda.device_count()):
-      alloc = torch.cuda.memory_allocated(i) / 1024**3
-      reserved = torch.cuda.memory_reserved(i) / 1024**3
-      total = torch.cuda.get_device_properties(i).total_memory / 1024**3
-      log(f"  GPU {i} {label}: allocated={alloc:.2f}GB  reserved={reserved:.2f}GB  total={total:.2f}GB")
+def log_gpu_memory(label=""):
+  if not torch.cuda.is_available():
+    log("CUDA not available")
+    return
+  for i in range(torch.cuda.device_count()):
+    alloc = torch.cuda.memory_allocated(i) / 1024**3
+    reserved = torch.cuda.memory_reserved(i) / 1024**3
+    total = torch.cuda.get_device_properties(i).total_memory / 1024**3
+    log(f"  GPU {i} {label}: allocated={alloc:.2f}GB  reserved={reserved:.2f}GB  total={total:.2f}GB")
+
+
+def get_first_valid(response:str)->Optional[str]:
+  response = response.strip()
+  if '```' in response:
+    s = response.split('```')
+    for i in range(len(s)):
+      if len(s[i].strip()) == 0:
+        continue
+      if s[i].startswith("python"):
+        s[i] = s[i][6:].strip() # clip this off
+      try:
+        byte_code = compile(s[i], "<user_code>", "exec")
+        print(s[i], flush=True)
+        return s[i]
+      except Exception as e:
+        print(e, flush=True)
+  return None
+
+
+if __name__ == "__main__":
+  parser = argparse.ArgumentParser()
+  parser.add_argument("--model", type=str, default="Qwen/Qwen3-Coder-30B-A3B-Instruct")
+  parser.add_argument("--temp", type=float, default=0.0)
+  parser.add_argument("--max_output_tokens", type=int, default=512)
+  parser.add_argument("--example", type=bool, default=True)
+  args = parser.parse_args()
+
+  setup_environment()
+
+  MODEL = args.model
+  TEMP = args.temp
+  EXAMPLE = args.example
+  MAX_OUTPUT_TOKENS = args.max_output_tokens
+  kwargs = {}
 
   log(f"Loading model: {MODEL}")
+  params = standardize_parameters(MODEL, TEMP, MAX_OUTPUT_TOKENS, kwargs)
+  model = ChatModel(MODEL, params)
   t0 = time.time()
-  llm = LLM(model=MODEL, dtype="bfloat16", tensor_parallel_size=4)
   log(f"Model loaded in {time.time()-t0:.1f}s")
   log_gpu_memory("after model load")
-
-  params = SamplingParams(temperature=TEMP, max_tokens=MAX_OUTPUT_TOKENS, **kwargs)
-
-
-  def chat(prompt:str)->str:
-    response = llm.generate([prompt], params)
-    print(response[0].outputs[0], flush=True)
-    return response[0].outputs[0].text
 
 
   with open("webmall_prompts.jsonl", "r") as infile:
@@ -122,26 +149,10 @@ if __name__ == "__main__":
 
   log(f"Loaded {len(prompts)} prompts. Starting test response...")
   log_gpu_memory("before first chat()")
-  response = '```python\n' + chat(prompts[0]['prompt'] + '\n' + example + '\n\n```python\n')
+  response = '```python\n' + model.chat(prompts[0]['prompt'] + '\n' + example + '\n\n```python\n')
   log("Test response done.")
   print(response, flush=True)
 
-  def get_first_valid(response:str)->str:
-    response = response.strip()
-    if '```' in response:
-      s = response.split('```')
-      for i in range(len(s)):
-        if len(s[i].strip()) == 0:
-          continue
-        if s[i].startswith("python"):
-          s[i] = s[i][6:].strip() # clip this off
-        try:
-          byte_code = compile(s[i], "<user_code>", "exec")
-          print(s[i], flush=True)
-          return s[i]
-        except Exception as e:
-          print(e, flush=True)
-    return None
 
   print(get_first_valid(response))
 
@@ -149,9 +160,9 @@ if __name__ == "__main__":
   with open(f"/scratch/m000186/esoroka/plan_only/webmall_plan_{MODEL}_{TEMP}_Example_{EXAMPLE}.jsonl", "w") as outfile:
       for p in tqdm(prompts):
           if EXAMPLE:
-            response = '```python\n' + chat(p['prompt'] + '\n' + example + '\n\n```python\n')
+            response = '```python\n' + model.chat(p['prompt'] + '\n' + example + '\n\n```python\n')
           else:
-            response = '```python\n' + chat(p['prompt'] + '\n\n```python\n')
+            response = '```python\n' + model.chat(p['prompt'] + '\n\n```python\n')
           p['response'] = response
           p['clean_response'] = get_first_valid(response)
 
