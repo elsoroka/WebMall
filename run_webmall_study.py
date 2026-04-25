@@ -159,10 +159,10 @@ AGENT_41_NL_PLANNER_AX_M = NlPlanningAgentArgs(
 )
 AGENT_CLAUDE_4_NL_PLANNER_AX_M = NlPlanningAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
-    flags=FLAGS_AX_M
+    flags=FLAGS_AX_M,
+    plan_from_file="../formal_verification/results/experiments/claude-sonnet-4-nl-critique-nl-plan/claude-sonnet-4-nl-critique-nl-plan-traces.jsonl"
 ,
 )
-
 
 AGENT_5_PLANNER_AX_M = PlanningAgentArgs(
     planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-5-2025-08-07"],
@@ -192,7 +192,7 @@ load_dotenv(PATH_TO_DOT_ENV_FILE)
 
 # choose your agent or provide a new agent
 
-agent_args = [AGENT_41_NL_PLANNER_AX_M]
+agent_args = [AGENT_CLAUDE_4_NL_PLANNER_AX_M]
 
 # ## select the benchmark to run on
 
