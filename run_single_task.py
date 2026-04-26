@@ -175,17 +175,52 @@ AGENT_4o_PLANNER = PlanningAgentArgs(
 )
 
 AGENT_CLAUDE_4_PREPLANNER = PlanningAgentArgs(
-    planner_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
-    executor_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
-    flags=FLAGS_AX,
+     planner_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
+     executor_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
+     flags=FLAGS_AX,
+     max_steps=50,
+     plan_from_file="preplanned/webmall_plan_Qwen3-Coder-30B-A3B-Instruct_0.7_Example_True.jsonl"
+ )
+
+# Local vLLM agents — server must be running at http://localhost:8000 (or VLLM_API_URL)
+
+# this guy is too small, he doesn't work
+#AGENT_VLLM_DEEPSEEK_6_7B = PlanningAgentArgs(
+    #planner_model_args=CHAT_MODEL_ARGS_DICT["vllm/deepseek-ai/deepseek-coder-6.7b-instruct"],
+    #executor_model_args=CHAT_MODEL_ARGS_DICT["vllm/deepseek-ai/deepseek-coder-6.7b-instruct"],
+    #flags=FLAGS_AX_M,
+    #plan_from_file="preplanned/webmall_plan_Qwen3-Coder-30B-A3B-Instruct_0.7_Example_True.jsonl",
+    #max_steps=50,
+#)
+
+AGENT_VLLM_DEEPSEEK_33B = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["vllm/deepseek-ai/deepseek-coder-33b-instruct"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["vllm/deepseek-ai/deepseek-coder-33b-instruct"],
+    flags=FLAGS_AX_M,
     max_steps=50,
-    plan_from_file="/home/esoroka/Desktop/research/llm_stl_benchmark/WebMall/preplanned/webmall_plan_Qwen3-Coder-30B-A3B-Instruct_0.7_Example_True.jsonl"
-,
+    plan_from_file="preplanned/webmall_plan_Qwen3-Coder-30B-A3B-Instruct_0.7_Example_True.jsonl",
+)
+
+# this guy is too small, he doesn't work
+#AGENT_VLLM_QWEN25_7B = PlanningAgentArgs(
+    #planner_model_args=CHAT_MODEL_ARGS_DICT["vllm/Qwen/Qwen2.5-Coder-7B-Instruct"],
+#    executor_model_args=CHAT_MODEL_ARGS_DICT["vllm/Qwen/Qwen2.5-Coder-7B-Instruct"],
+#    flags=FLAGS_AX_M,
+#    max_steps=50,
+#    plan_from_file="preplanned/webmall_plan_Qwen3-Coder-30B-A3B-Instruct_0.7_Example_True.jsonl",
+#)
+
+AGENT_VLLM_QWEN3_30B = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["vllm/Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["vllm/Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8"],
+    flags=FLAGS_AX_M,
+    max_steps=50,
+    plan_from_file="preplanned/webmall_plan_Qwen3-Coder-30B-A3B-Instruct_0.7_Example_True.jsonl",
 )
 
 # example for a single task
 env_args = EnvArgsWebMall(
-    task_name="webmall.Webmall_Cheapest_Offer_Specific_Requirements_Task2",
+    task_name="webmall.Webmall_Find_Specific_Product_Task1",
     task_seed=0,
     max_steps=50,
     headless=True,
@@ -194,7 +229,7 @@ env_args = EnvArgsWebMall(
 
 
 
-agent = AGENT_CLAUDE_4_PREPLANNER
+agent = AGENT_VLLM_DEEPSEEK_33B
 
 agent.set_benchmark(bgym.DEFAULT_BENCHMARKS["webarena"](), demo_mode="off")
 
