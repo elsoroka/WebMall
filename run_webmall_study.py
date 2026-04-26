@@ -152,16 +152,17 @@ AGENT_5_NL_PLANNER_AX_M = NlPlanningAgentArgs(
     flags=FLAGS_AX_M
 ,
 )
+
 AGENT_41_NL_PLANNER_AX_M = NlPlanningAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
     flags=FLAGS_AX_M,
     plan_from_file="../formal_verification/results/experiments/gpt4.1-nl-critique-nl-plan/gpt4.1-nl-critique-nl-plan-traces.jsonl"
 )
+
 AGENT_CLAUDE_4_NL_PLANNER_AX_M = NlPlanningAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
     flags=FLAGS_AX_M,
-    plan_from_file="../formal_verification/results/experiments/claude-sonnet-4-nl-critique-nl-plan/claude-sonnet-4-nl-critique-nl-plan-traces.jsonl"
-,
+    plan_from_file="../formal_verification/results/experiments/claude-sonnet-4-nl-critique-nl-plan/claude-sonnet-4-nl-critique-nl-plan-traces.jsonl",
 )
 
 AGENT_5_PLANNER_AX_M = PlanningAgentArgs(
@@ -170,18 +171,37 @@ AGENT_5_PLANNER_AX_M = PlanningAgentArgs(
     flags=FLAGS_AX_M,
 )
 
-
 AGENT_41_PLANNER_AX_M = PlanningAgentArgs(
     planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
     executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
     flags=FLAGS_AX_M,
+    plan_from_file="../formal_verification/results/experiments/gpt4.1-fv-guided/traces.jsonl",
+    max_steps=50,
 )
-
 
 AGENT_CLAUDE_4_PLANNER_AX_M = PlanningAgentArgs(
     planner_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
     executor_model_args=CHAT_MODEL_ARGS_DICT["stanford/claude-4-sonnet"],
+    plan_from_file="../formal_verification/results/experiments/claude-sonnet-4-fv-guided/traces.jsonl",
     flags=FLAGS_AX_M,
+    max_steps=50,
+)
+
+
+AGENT_VLLM_DEEPSEEK_33B = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["vllm/deepseek-ai/deepseek-coder-33b-instruct"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["vllm/deepseek-ai/deepseek-coder-33b-instruct"],
+    flags=FLAGS_AX_M,
+    max_steps=50,
+    plan_from_file="../formal_verification/results/experiments/deepseek-coder-33b-instruct_oracle-nl/deepseek-coder-33b-instruct_oracle-nl-traces.jsonl",
+)
+
+AGENT_VLLM_QWEN3_30B = PlanningAgentArgs(
+    planner_model_args=CHAT_MODEL_ARGS_DICT["vllm/Qwen/Qwen3-Coder-30B-A3B-Instruct"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["vllm/Qwen/Qwen3-Coder-30B-A3B-Instruct"],
+    flags=FLAGS_AX_M,
+    max_steps=50,
+    plan_from_file="../formal_verification/results/experiments/Qwen3-Coder-30B-A3B-Instruct_oracle-nl/Qwen3-Coder-30B-A3B-Instruct_oracle-nl-traces.jsonl",
 )
 
 
@@ -192,7 +212,7 @@ load_dotenv(PATH_TO_DOT_ENV_FILE)
 
 # choose your agent or provide a new agent
 
-agent_args = [AGENT_CLAUDE_4_NL_PLANNER_AX_M]
+agent_args = [AGENT_41_PLANNER_AX_M]
 
 # ## select the benchmark to run on
 
@@ -201,10 +221,10 @@ agent_args = [AGENT_CLAUDE_4_NL_PLANNER_AX_M]
 # benchmark = "webmall_cheapest_product_search_v1.0"
 #benchmark = "webmall_action_and_transaction_v1.0"
 # benchmark = "webmall_end_to_end_v1.0"
-#benchmark = "webmall_basic_v1.0"
 #benchmark = "webmall_partial_advanced_v1.0"
 #benchmark = "webmall_remaining_partial_advanced_v1.0"
 benchmark = "webmall_basic_v1.0"
+# benchmark = "webmall_advanced_v1.0"
 
 # Set reproducibility_mode = True for reproducibility
 # this will "ask" agents to be deterministic. Also, it will prevent you from launching if you have

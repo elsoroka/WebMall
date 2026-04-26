@@ -198,7 +198,7 @@ AGENT_VLLM_DEEPSEEK_33B = PlanningAgentArgs(
     executor_model_args=CHAT_MODEL_ARGS_DICT["vllm/deepseek-ai/deepseek-coder-33b-instruct"],
     flags=FLAGS_AX_M,
     max_steps=50,
-    plan_from_file="preplanned/webmall_plan_Qwen3-Coder-30B-A3B-Instruct_0.7_Example_True.jsonl",
+    plan_from_file="../formal_verification/results/experiments/deepseek-coder-33b-instruct_oracle-nl/deepseek-coder-33b-instruct_oracle-nl-traces.jsonl",
 )
 
 # this guy is too small, he doesn't work
@@ -211,11 +211,11 @@ AGENT_VLLM_DEEPSEEK_33B = PlanningAgentArgs(
 #)
 
 AGENT_VLLM_QWEN3_30B = PlanningAgentArgs(
-    planner_model_args=CHAT_MODEL_ARGS_DICT["vllm/Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8"],
-    executor_model_args=CHAT_MODEL_ARGS_DICT["vllm/Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8"],
+    planner_model_args=CHAT_MODEL_ARGS_DICT["vllm/Qwen/Qwen3-Coder-30B-A3B-Instruct"],
+    executor_model_args=CHAT_MODEL_ARGS_DICT["vllm/Qwen/Qwen3-Coder-30B-A3B-Instruct"],
     flags=FLAGS_AX_M,
     max_steps=50,
-    plan_from_file="preplanned/webmall_plan_Qwen3-Coder-30B-A3B-Instruct_0.7_Example_True.jsonl",
+    plan_from_file="../formal_verification/results/experiments/Qwen3-Coder-30B-A3B-Instruct_oracle-nl/Qwen3-Coder-30B-A3B-Instruct_oracle-nl-traces.jsonl",
 )
 
 # example for a single task
