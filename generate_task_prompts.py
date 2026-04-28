@@ -57,11 +57,11 @@ Your plan should make use of the following Python functions to interact with a w
 12 different types of actions are available.
 
 noop(wait_ms: float = 1000)
-search_on_page(search_page_url: str, search_text: str) -> Optional[str]
+search_on_page(search_page_url: str, search_text: str, selection_criteria: str) -> str:
 open_page(url: str) -> bool
 close_page() -> bool
 navigate_to_page(description: str) -> bool
-extract_information_from_page(description: str) -> Optional[Union[int, float, str]]
+extract_information_from_page(description: str, url: str = None) -> Optional[Union[int, float, str]]
 fill_text_field(field_description: str, text: str) -> bool
 press_button(button_description: str) -> bool
 select_option(bid: str, options: str | list[str]) -> bool
