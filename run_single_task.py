@@ -220,7 +220,7 @@ AGENT_VLLM_QWEN3_30B = PlanningAgentArgs(
 
 # example for a single task
 env_args = EnvArgsWebMall(
-    task_name="webmall.Webmall_Find_Specific_Product_Task1",
+    task_name="webmall.Webmall_Products_Fulfilling_Specific_Requirements_Task1",
     task_seed=0,
     max_steps=50,
     headless=True,
@@ -229,7 +229,7 @@ env_args = EnvArgsWebMall(
 
 
 
-agent = AGENT_VLLM_DEEPSEEK_33B
+agent = AGENT_4_1_PLANNER
 
 agent.set_benchmark(bgym.DEFAULT_BENCHMARKS["webarena"](), demo_mode="off")
 

@@ -128,7 +128,7 @@ AGENT_CLAUDE_AX_V = GenericAgentArgs(
 
 AGENT_41_AX_M = GenericAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
-    flags=FLAGS_AX_M,
+    flags=FLAGS_AX_M
 )
 
 AGENT_5mini_AX_M = GenericAgentArgs(
@@ -204,43 +204,52 @@ AGENT_VLLM_QWEN3_30B = PlanningAgentArgs(
     plan_from_file="../formal_verification/results/experiments/Qwen3-Coder-30B-A3B-Instruct_oracle-nl/Qwen3-Coder-30B-A3B-Instruct_oracle-nl-traces.jsonl",
 )
 
-
-current_file = Path(__file__).resolve()
-PATH_TO_DOT_ENV_FILE = current_file.parent / ".env"
-load_dotenv(PATH_TO_DOT_ENV_FILE)
-
-
-# choose your agent or provide a new agent
-
-agent_args = [AGENT_41_PLANNER_AX_M]
-
-# ## select the benchmark to run on
-
-#benchmark = "webmall_specific_product_search_v1.0"
-# benchmark = "webmall_vague_product_search_v1.0"
-# benchmark = "webmall_cheapest_product_search_v1.0"
-#benchmark = "webmall_action_and_transaction_v1.0"
-# benchmark = "webmall_end_to_end_v1.0"
-#benchmark = "webmall_partial_advanced_v1.0"
-#benchmark = "webmall_remaining_partial_advanced_v1.0"
-benchmark = "webmall_basic_v1.0"
-# benchmark = "webmall_advanced_v1.0"
-
-# Set reproducibility_mode = True for reproducibility
-# this will "ask" agents to be deterministic. Also, it will prevent you from launching if you have
-# local changes. For your custom agents you need to implement set_reproducibility_mode
-reproducibility_mode = False
-
-# Set relaunch = True to relaunch an existing study, this will continue incomplete
-# experiments and relaunch errored experiments
-relaunch = False
-
-## Number of parallel jobs
-n_jobs = 1  # Make sure to use 1 job when debugging in VSCode
-# n_jobs = -1  # to use all available cores
-
+import argparse
 
 if __name__ == "__main__":  # necessary for dask backend
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--agent", type=str, default="AGENT_41_AX_M")
+    parser.add_argument("--benchmark", type=str, default="webmall_partial_basic_v1.0")
+    args = parser.parse_args()
+
+    current_file = Path(__file__).resolve()
+    PATH_TO_DOT_ENV_FILE = current_file.parent / ".env"
+    load_dotenv(PATH_TO_DOT_ENV_FILE)
+
+
+    # choose your agent or provide a new agent
+
+    agent_args = [globals()[args.agent]]
+
+    # ## select the benchmark to run on
+
+    #benchmark = "webmall_specific_product_search_v1.0"
+    # benchmark = "webmall_vague_product_search_v1.0"
+    # benchmark = "webmall_cheapest_product_search_v1.0"
+    #benchmark = "webmall_action_and_transaction_v1.0"
+    # benchmark = "webmall_end_to_end_v1.0"
+    # benchmark = "webmall_partial_basic_v1.0"
+    # benchmark = "webmall_remaining_partial_basic_v1.0"
+    #benchmark = "webmall_partial_advanced_v1.0"
+    #benchmark = "webmall_remaining_partial_advanced_v1.0"
+
+    benchmark = args.benchmark
+
+    # Set reproducibility_mode = True for reproducibility
+    # this will "ask" agents to be deterministic. Also, it will prevent you from launching if you have
+    # local changes. For your custom agents you need to implement set_reproducibility_mode
+    reproducibility_mode = False
+
+    # Set relaunch = True to relaunch an existing study, this will continue incomplete
+    # experiments and relaunch errored experiments
+    relaunch = False
+
+    ## Number of parallel jobs
+    n_jobs = 1  # Make sure to use 1 job when debugging in VSCode
+    # n_jobs = -1  # to use all available cores
+
+
 
     if reproducibility_mode:
         [a.set_reproducibility_mode() for a in agent_args]
