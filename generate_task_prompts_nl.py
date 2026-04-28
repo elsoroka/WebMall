@@ -12,9 +12,20 @@ from AgentLab.src.agentlab.llm.llm_utils import (
 )
 
 
-system_prompt = """You are an expert planner. Your task is to write a plan in Python code to automate a web interaction task. Do not solve the task yourself: only write the plan.
-# Instructions
-Use the provided Python functions to write a plan in Python code to reach the goal. Do not solve the task yourself; only write the plan. Write a simple plan without considering edge cases.
+system_prompt = """You are an expert web navigation planner. Your role is to analyze a task goal and create a concise high-level strategy. You do not execute actions yourself; you provide a plan that a web agent will follow step by step.
+
+## Instructions:
+Given the task goal below, write a concise high-level plan as a numbered list of steps. \
+Each step should describe a logical phase of the task (e.g., "Search for product X on store Y", \
+"1. Search for Product P on Store S", "2. Add the cheapest option to cart"). \
+Focus on strategy, not low-level browser interactions.
+
+In your plan, refer to specific web URLs for stores, product names, and requirements for products. Only use the four provided webshops and the solutions page. Do not visit any other websites.
+Make sure each step is self-contained with all the information necessary to execute it.
+The steps will be provided to an LLM agent, and only one step will be visible at a time.
+After each step, the LLM agent will make a note on its progress so it can retain information from previous steps.
+
+Separate each step from the next with \\n\\n.
 
 ## Goal:
 """
@@ -48,29 +59,8 @@ bid=\'6\'
 
 # History of interaction with the task:
 """
-action_prompt = """
-# Action space:
 
-# Functions::
-Your plan should make use of the following Python functions to interact with a web browser. Assume these functions handle all edge cases and error checking internally.
-
-12 different types of actions are available.
-
-noop(wait_ms: float = 1000)
-search_on_page(search_page_url: str, search_text: str) -> Optional[str]
-open_page(url: str) -> bool
-close_page() -> bool
-navigate_to_page(description: str) -> bool
-extract_information_from_page(description: str) -> Optional[Union[int, float, str]]
-fill_text_field(field_description: str, text: str) -> bool
-press_button(button_description: str) -> bool
-select_option(bid: str, options: str | list[str]) -> bool
-generic_action(description: str) -> str
-add_to_cart(url: str, item_description: str) -> bool
-checkout(payment_and_shipping_information: str) -> bool
-"""
-
-with open("webmall_prompts.jsonl", "w") as outfile:
+with open("webmall_prompts_nl.jsonl", "w") as outfile:
     seen_ids = set()
     for k,v in WEBMALL_BENCHMARKS.items():
         print(k)
@@ -96,8 +86,6 @@ with open("webmall_prompts.jsonl", "w") as outfile:
 {specific_task}
 
 {obs_str}
-
-{action_prompt}
 """
             obj = {"prompt":prompt,
             "id": t_name.task_name,
