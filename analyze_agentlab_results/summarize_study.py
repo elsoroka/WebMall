@@ -8,7 +8,7 @@ import re
 import csv
 from collections import defaultdict
 
-STUDY_RESULTS_DIR = "../AgentLab/study_results/final"
+STUDY_RESULTS_DIR = "../final_results"
 
 
 def calculation_results(benchmark_solutions, model_solution):

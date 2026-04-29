@@ -156,7 +156,7 @@ AGENT_5_NL_PLANNER_AX_M = NlPlanningAgentArgs(
 AGENT_41_NL_PLANNER_AX_M = NlPlanningAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
     flags=FLAGS_AX_M,
-    plan_from_file="../formal_verification/results/experiments/gpt4.1-nl-critique-nl-plan/gpt4.1-nl-critique-nl-plan-traces.jsonl"
+    #plan_from_file="../formal_verification/results/experiments/gpt4.1-nl-critique-nl-plan/gpt4.1-nl-critique-nl-plan-traces.jsonl"
 )
 
 AGENT_CLAUDE_4_NL_PLANNER_AX_M = NlPlanningAgentArgs(
@@ -175,7 +175,7 @@ AGENT_41_PLANNER_AX_M = PlanningAgentArgs(
     planner_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
     executor_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-2025-04-14"],
     flags=FLAGS_AX_M,
-    plan_from_file="../formal_verification/results/experiments/gpt4.1-fv-guided/traces.jsonl",
+    plan_from_file="../formal_verification/results/experiments/gpt4.1-oracle-nl/traces.jsonl",
     max_steps=50,
 )
 

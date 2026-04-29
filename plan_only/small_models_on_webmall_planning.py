@@ -42,7 +42,7 @@ results = []
 for store in stores:
     url_or_none = search_for_page(store, "Product P") # Return the product page URL or None if not found
     if url_or_none is not None:
-        price = extract_information_from_page("Lowest price of the product")
+        price = extract_information_from_page("Lowest price of the product", url=url_or_none)
         results.append((url_or_none, price))
 
 selected_url = min(results, key=lambda x: x[1])[0]
